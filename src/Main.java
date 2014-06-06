@@ -4,12 +4,48 @@ import Monad.State;
 
 import java.util.Optional;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Created by olorin on 12.04.14.
  */
 public class Main {
     public static void main(String[] args)
+    {
+        System.out.println(low1(v -> Optional.of(1+v), 1));
+        System.out.println(low2(Optional.of(1)));
+        System.out.println(low3(Optional.of(1),
+                                v -> Optional.of(v+1),
+                                v -> Optional.of(v+10)) );
+        //System.in.read();
+    }
+
+    public static boolean low1(Function<Integer, Optional<Integer>> k,
+                               Integer v)
+    {
+        Optional<Integer> left  = Optional.of(1).flatMap( k );
+        Optional<Integer> right = k.apply(v);
+        System.out.print(left + " == " + right + " => ");
+        return left.equals(right);
+    }
+    public static boolean low2(Optional<Integer> m)
+    {
+        Optional<Integer> left  = m.flatMap(Optional::of);
+        Optional<Integer> right = m;
+        System.out.print(left + " == " + right + " => ");
+        return left.equals(right);
+    }
+    public static boolean low3(Optional<Integer> m,
+                               Function<Integer, Optional<Integer>> k,
+                               Function<Integer, Optional<Integer>> h)
+    {
+        Optional<Integer> left  =  (m.flatMap(k)).flatMap(h);
+        Optional<Integer> right =  m.flatMap(v -> k.apply(v).flatMap(h));
+        System.out.print(left + " == " + right + " => ");
+        return left.equals(right);
+    }
+
+    public static void main2(String[] args)
     {
 
         System.out.println("Witam");
@@ -43,4 +79,5 @@ public class Main {
 
         System.out.println(sth.toString() +"  "+ sth1.toString());
     }
+
 }

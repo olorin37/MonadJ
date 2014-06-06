@@ -9,11 +9,6 @@ package Monad;
 import java.util.function.Function;
 
 public abstract class Maybe<T> {
-    protected final T value;
-    private Maybe(T val) {
-        value = val;
-    }
-
     public static <T> Maybe<T> unit(final T val) {
         return new Just<>(val);
     }
@@ -26,8 +21,9 @@ public abstract class Maybe<T> {
 }
 
 class Just<T> extends Maybe<T> {
+    private final T value;
     public Just(T val) {
-        super(val);
+        value = val;
     }
 
     public <B> Maybe<B> bind(Function<T, Maybe<B>> f) {
@@ -43,9 +39,7 @@ class Just<T> extends Maybe<T> {
 }
 
 class Nothing<T> extends Maybe<T> {
-    public Nothing() {
-        super(null);
-    }
+    public Nothing() {}
 
     public <B> Maybe<B> bind(Function<T, Maybe<B>> f) {
         return (Maybe<B>) new Nothing<>();
