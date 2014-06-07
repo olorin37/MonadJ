@@ -22,7 +22,7 @@ public abstract class Maybe<T> {
 
 class Just<T> extends Maybe<T> {
     private final T value;
-    public Just(T val) {
+    protected Just(T val) {
         value = val;
     }
 
@@ -39,7 +39,7 @@ class Just<T> extends Maybe<T> {
 }
 
 class Nothing<T> extends Maybe<T> {
-    public Nothing() {}
+    protected Nothing() {}
 
     public <B> Maybe<B> bind(Function<T, Maybe<B>> f) {
         return (Maybe<B>) new Nothing<>();

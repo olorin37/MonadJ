@@ -9,10 +9,7 @@ package Monad;
 import java.util.function.Function;
 
 public abstract class Validation<T> {
-    protected final T value;
-    public Validation(T val) {
-        value = val;
-    }
+    protected Validation() {}
 
     public static <T> Validation<T> unit(T val) {
         return new Success(val);
@@ -26,8 +23,9 @@ public abstract class Validation<T> {
 }
 
 class Success<T> extends Validation<T> {
-    public Success(T val) {
-        super(val);
+    private final T value;
+    protected Success(T val) {
+        value = val;
     }
 
     public <B> Validation<B> bind(Function<T, Validation<B>> f) {
@@ -45,7 +43,7 @@ class Success<T> extends Validation<T> {
 class Error<T> extends Validation<T> {
     private final String errorMsg;
     public Error(String msg) {
-        super(null);
+        super();
         errorMsg = msg;
     }
 
