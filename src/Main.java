@@ -50,6 +50,15 @@ public class Main {
                             u.bind(y ->
                             Identity.unit(x + y))) );
 
+        System.out.println("\nTest Monady listowej");
+        ListMonad<Integer> vs = ListMonad.of(70,80);
+        ListMonad<Integer> us = ListMonad.of(1,2,3,4,5);
+        System.out.println("Definiujemy dwie wartości monadyczne : " + vs + " oraz " + us );
+        System.out.println("Wyniki obliczeń:");
+        System.out.println( vs.bind( x ->
+                            us.bind( y ->
+                            ListMonad.unit((Integer)x + (Integer)y) )));
+
     }
 
     public static void testMonadLowInOptional()

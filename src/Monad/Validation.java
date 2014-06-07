@@ -42,8 +42,7 @@ class Success<T> extends Validation<T> {
 
 class Error<T> extends Validation<T> {
     private final String errorMsg;
-    public Error(String msg) {
-        super();
+    protected Error(String msg) {
         errorMsg = msg;
     }
 

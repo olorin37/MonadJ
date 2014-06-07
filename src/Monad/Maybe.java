@@ -9,6 +9,8 @@ package Monad;
 import java.util.function.Function;
 
 public abstract class Maybe<T> {
+    protected Maybe() {}
+
     public static <T> Maybe<T> unit(final T val) {
         return new Just<>(val);
     }
