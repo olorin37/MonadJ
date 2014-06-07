@@ -6,8 +6,6 @@
  */
 package Monad;
 
-import sun.net.www.content.text.plain;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
