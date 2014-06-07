@@ -57,6 +57,6 @@ class Error<T> extends Validation<T> {
     }
 
     public String toString() {
-        return "Error: " + errorMsg;
+        return "Error \"" + errorMsg +"\"";
     }
 }

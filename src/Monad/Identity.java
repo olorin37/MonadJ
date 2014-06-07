@@ -27,4 +27,8 @@ public class Identity<T> {
     public <B> Identity<B> map(Function<T, B> f) {
         return new Identity<B>( f.apply(value) );
     }
+
+    public String toString() {
+        return "Id " + value;
+    }
 }

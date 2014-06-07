@@ -1,6 +1,4 @@
-import Monad.Maybe;
-import Monad.Validation;
-import Monad.State;
+import Monad.*;
 
 import java.util.Optional;
 import java.util.List;
@@ -12,72 +10,60 @@ import java.util.function.Function;
 public class Main {
     public static void main(String[] args)
     {
-        System.out.println(low1(v -> Optional.of(1+v), 1));
-        System.out.println(low2(Optional.of(1)));
-        System.out.println(low3(Optional.of(1),
-                                v -> Optional.of(v+1),
-                                v -> Optional.of(v+10)) );
-        //System.in.read();
+        testMyMonads();
+        testMonadLowInOptional();
     }
 
-    public static boolean low1(Function<Integer, Optional<Integer>> k,
-                               Integer v)
+    public static void testMyMonads()
     {
-        Optional<Integer> left  = Optional.of(1).flatMap( k );
-        Optional<Integer> right = k.apply(v);
-        System.out.print(left + " == " + right + " => ");
-        return left.equals(right);
-    }
-    public static boolean low2(Optional<Integer> m)
-    {
-        Optional<Integer> left  = m.flatMap(Optional::of);
-        Optional<Integer> right = m;
-        System.out.print(left + " == " + right + " => ");
-        return left.equals(right);
-    }
-    public static boolean low3(Optional<Integer> m,
-                               Function<Integer, Optional<Integer>> k,
-                               Function<Integer, Optional<Integer>> h)
-    {
-        Optional<Integer> left  =  (m.flatMap(k)).flatMap(h);
-        Optional<Integer> right =  m.flatMap(v -> k.apply(v).flatMap(h));
-        System.out.print(left + " == " + right + " => ");
-        return left.equals(right);
-    }
+        System.out.println("Test obliczeń monadycznych Monad.*");
 
-    public static void main2(String[] args)
-    {
+        System.out.println("Test Monady Maybe");
 
-        System.out.println("Witam");
         Maybe<Integer> liczba = Maybe.unit(10);
         Maybe<Integer> nic = Maybe.<Integer>nothing();
-        System.out.println("Monad Maybe : opcjonalość");
-        System.out.println("Deklarujemy liczbę: " + liczba );
+        System.out.println("Definiujemy dwie wartości monadyczne : " + liczba + " oraz " + nic );
+        System.out.println("Wyniki obliczeń:");
         System.out.println( liczba.bind(n -> Maybe.unit(n+1)) );
         System.out.println( nic.bind(n -> Maybe.unit(n + 4).map((m -> (m + 1) / 2 < 9))) );
 
-        System.out.println("\nMonad Error: walidacja" );
+        System.out.println("\nTest Monady Error" );
 
         Validation<Integer> liczba2 = Validation.unit(10);
         Validation<Integer> blad = Validation.<Integer>error("Głupi błąd w trakcie obliczeń.");
-
-        System.out.println( liczba2 );
+        System.out.println("Definiujemy dwie wartości monadyczne : " + liczba2 + " oraz " + blad );
+        System.out.println("Wyniki obliczeń:");
         System.out.println( liczba2.bind(n ->
-                                Validation.<Integer>unit(n+1).bind(k ->
-                                        Validation.unit(k*3)
-                                )
+                Validation.<Integer>unit(n+1).bind(k ->
+                        Validation.unit(k*3)
+                )
         ) );
         System.out.println( liczba2.<Integer>bind(i -> blad) );
         System.out.println( liczba2.bind(n -> (blad).map(v -> v * 10 + 1)) );
 
-        System.out.println("Stan");
-        State<Integer, Integer> valst = State.unit(5);
+        System.out.println("\nTest Monady Identity");
+        Identity<Integer> v = Identity.unit(5);
+        Identity<Integer> u = Identity.unit(7);
+        System.out.println("Definiujemy dwie wartości monadyczne : " + v + " oraz " + u );
+        System.out.println("Wyniki obliczeń:");
+        System.out.println( v.bind(x ->
+                            u.bind(y ->
+                            Identity.unit(x + y))) );
 
-        Optional<Integer> sth = Optional.of(37);
-        Optional<Double> sth1 = sth.flatMap(i ->  Optional.of(Math.exp(1) * i));
-
-
-        System.out.println(sth.toString() +"  "+ sth1.toString());
     }
+
+    public static void testMonadLowInOptional()
+    {
+        System.out.println("\nTest if Optional<> satisfies monadic lows");
+        System.out.println(MonadLows.low1_Optional(v -> Optional.of(1 + v), 1));
+        System.out.println(MonadLows.low2_Optional(Optional.of(1)));
+        System.out.println(MonadLows.low3_Optional(Optional.of(1),
+                v -> Optional.of(v + 1),
+                v -> Optional.of(v + 10)) );
+    }
+
+
+
+
 
 }
