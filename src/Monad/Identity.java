@@ -31,4 +31,9 @@ public class Identity<T> {
     public String toString() {
         return "Id " + value;
     }
+
+    // dopasowanie nazewnictwa
+    public <B> Identity<B> flatMap(Function<T, Identity<B>> k) {
+        return this.bind(k);
+    }
 }

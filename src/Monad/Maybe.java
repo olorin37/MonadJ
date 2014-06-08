@@ -20,6 +20,11 @@ public abstract class Maybe<T> {
 
     public abstract  <B> Maybe<B> bind(Function<T, Maybe<B>> f);
     public abstract  <B> Maybe<B> map(Function<T, B> f);
+
+    // dopasowanie nazewnictwa
+    public <B> Maybe<B> flatMap(Function<T, Maybe<B>> k) {
+        return this.bind(k);
+    }
 }
 
 class Just<T> extends Maybe<T> {

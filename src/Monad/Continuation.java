@@ -28,4 +28,9 @@ public class Continuation<V, Ans> {
         return this.bind(v -> unit(f.apply(v)));
         //return new Continuation<W, Ans>(c -> cont.apply(a -> f.apply(a)));
     }
+
+    // dopasowanie nazewnictwa
+    public <B> Continuation<B> flatMap(Function<T, Continuation<B>> k) {
+        return this.bind(k);
+    }
 }

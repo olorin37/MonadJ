@@ -20,6 +20,11 @@ public abstract class Validation<T> {
 
     public abstract  <B> Validation<B> bind(Function<T, Validation<B>> f);
     public abstract  <B> Validation<B> map(Function<T, B> f);
+
+    // dopasowanie nazewnictwa
+    public <B> Validation<B> flatMap(Function<T, Validation<B>> k) {
+        return this.bind(k);
+    }
 }
 
 class Success<T> extends Validation<T> {

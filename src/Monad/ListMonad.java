@@ -41,6 +41,11 @@ public class ListMonad<A> extends LinkedList<A> implements List<A> {
         return ListMonad.concat(this.map(k));
     }
 
+    // dostosowanie nazewnictwa
+    public <B> ListMonad<B> flatMap(Function<A, ListMonad<B>> k) {
+        return this.bind(k);
+    }
+
     // pomocnicze funkcje
 
     public <B> ListMonad<B> map(Function<A, B> f) {
