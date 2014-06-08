@@ -21,9 +21,10 @@ public class Identity<T> {
         return new Identity<T>(val);
     }
 
-    public <B> Identity<B> bind(Function<T, Identity<B>> f) {
+    public <B> Identity<B> bind(Function<? super T, Identity<B>> f) {
         return f.apply(value);
     }
+
     public <B> Identity<B> map(Function<T, B> f) {
         return new Identity<B>( f.apply(value) );
     }

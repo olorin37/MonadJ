@@ -29,8 +29,12 @@ public class Continuation<V, Ans> {
         //return new Continuation<W, Ans>(c -> cont.apply(a -> f.apply(a)));
     }
 
+    public Ans evaluate(Function<V, Ans> outf) {
+        return cont.apply(outf);
+    }
+
     // dopasowanie nazewnictwa
-    public <B> Continuation<B> flatMap(Function<T, Continuation<B>> k) {
+    public <B> Continuation<B, Ans> flatMap(Function<V, Continuation<B, Ans>> k) {
         return this.bind(k);
     }
 }

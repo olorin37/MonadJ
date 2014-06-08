@@ -6,6 +6,7 @@
  */
 package Monad;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public abstract class Maybe<T> {
@@ -20,6 +21,8 @@ public abstract class Maybe<T> {
 
     public abstract  <B> Maybe<B> bind(Function<T, Maybe<B>> f);
     public abstract  <B> Maybe<B> map(Function<T, B> f);
+    public abstract boolean isPresent();
+    public abstract void ifPresent(Consumer<? super T> consumer);
 
     // dopasowanie nazewnictwa
     public <B> Maybe<B> flatMap(Function<T, Maybe<B>> k) {
@@ -40,8 +43,28 @@ class Just<T> extends Maybe<T> {
         return new Just<>( f.apply(value) );
     }
 
+    @Override
+    public boolean isPresent() {
+        return true;
+    }
+
+    @Override
+    public void ifPresent(Consumer<? super T> consumer) {
+        consumer.accept(value);
+    }
+
+    @Override
     public String toString() {
         return "Just " + value;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (this.getClass().equals(obj.getClass())) {
+            return this.value.equals( ((Just<T>)obj).value );
+        } else
+            return false;
     }
 }
 
@@ -49,13 +72,33 @@ class Nothing<T> extends Maybe<T> {
     protected Nothing() {}
 
     public <B> Maybe<B> bind(Function<T, Maybe<B>> f) {
-        return (Maybe<B>) new Nothing<>();
+        return new Nothing<>();
     }
     public <B> Maybe<B> map(Function<T, B> f) {
-        return (Maybe<B>) new Nothing<>();
+        return new Nothing<>();
     }
 
+    @Override
+    public boolean isPresent() {
+        return false;
+    }
+
+    @Override
+    public void ifPresent(Consumer<? super T> consumer) {
+        return;
+    }
+
+    @Override
     public String toString() {
         return "Nothing";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (this.getClass().equals(obj.getClass())) {
+            return !this.isPresent() && !((Maybe<T>)obj).isPresent();
+        } else
+            return false;
     }
 }

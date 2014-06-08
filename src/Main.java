@@ -1,7 +1,9 @@
 import Monad.*;
+import Primitives.Pair;
 
 import java.util.Optional;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -16,16 +18,19 @@ public class Main {
 
     public static void testMyMonads()
     {
-        System.out.println("Test obliczeń monadycznych Monad.*");
+        System.out.println("Test obliczeń monadycznych");
 
         System.out.println("Test Monady Maybe");
 
         Maybe<Integer> liczba = Maybe.unit(10);
         Maybe<Integer> nic = Maybe.<Integer>nothing();
+        Maybe<Integer> jedenastka = Maybe.nothing();
         System.out.println("Definiujemy dwie wartości monadyczne : " + liczba + " oraz " + nic );
         System.out.println("Wyniki obliczeń:");
         System.out.println( liczba.bind(n -> Maybe.unit(n+1)) );
         System.out.println( nic.bind(n -> Maybe.unit(n + 4).map((m -> (m + 1) / 2 < 9))) );
+        System.out.println( "Czy "+ jedenastka +" equals liczba ("+ liczba.bind(n -> Maybe.nothing()) +"): "
+                + jedenastka.equals(liczba.bind(n -> Maybe.nothing())) );
 
         System.out.println("\nTest Monady Error" );
 
@@ -57,8 +62,29 @@ public class Main {
         System.out.println("Wyniki obliczeń:");
         System.out.println( vs.bind( x ->
                             us.bind( y ->
-                            ListMonad.unit((Integer)x + (Integer)y) )));
+                            ListMonad.unit(x + y) )));
 
+        BiFunction<Integer, Integer, Integer> inc = (a, b) -> a+1;
+
+        System.out.println("\nTest Monady stanu");
+        State<Integer, Integer> mstat = State.unit(10);
+        State<Integer, Integer> res =
+                mstat.transform(inc).bind(x ->
+                        State.<Integer, Integer>unit(5)
+                                .transform(inc).bind(y ->
+                                State.unit(x + y)));
+        System.out.println("Wynik obiczeń i stan " + res.evaluateFor(0));
+    
+        System.out.println("\nTest Moanda kontynuacyjna");
+        Continuation<Integer,String> mcont1 = Continuation.<Integer,String>unit(10);
+        Continuation<Integer,String> mcont2 = Continuation.<Integer,String>unit(1);
+        Continuation<Integer,String> p =
+                mcont1.bind( x ->
+                Continuation.<Integer,String>unit(x+1).bind( y ->
+                mcont2.<Integer>bind(z ->
+                Continuation.<Integer,String>unit(z + y))));
+
+        System.out.println("Wynik: " + p.evaluate(n -> n.toString()));
     }
 
     public static void testMonadLowInOptional()

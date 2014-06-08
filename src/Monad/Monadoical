@@ -1,0 +1,15 @@
+typeclass JavaMonadoical<T> {
+    static <T> JavaMonadoical<T> empty();     // niedopuszczalne w interface
+    boolean                      equals(Object obj);
+    JavaMonadoical<T>            filter(Predicate<? super T> predicate);
+    <U> JavaMonadoical<U>        flatMap(Function<? super T, JavaMonadoical<U>> mapper);
+    T                            get();
+    void                         ifPresent(Consumer<? super T> consumer);
+    boolean                      isPresent();
+    <U> JavaMonadoical<U>        map(Function<? super T, ? extends U> mapper);
+    static <T> JavaMonadoical<T> of(T values);         // niedopuszczalne w interface
+    static <T> JavaMonadoical<T> ofNullable(T values); // niedopuszczalne w interface
+    T                            orElse(T other);
+    T                            orElseGet(Supplier<? extends T> other);
+    <E extends Throwable> T      orElseThrow(Supplier<? extends E> exceptionSupplier);
+}
