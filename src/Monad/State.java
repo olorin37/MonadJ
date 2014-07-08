@@ -54,5 +54,4 @@ public class State<S, V> {
         Pair<S, V> p = st.apply(initialState);
          return p;
     }
-
 }

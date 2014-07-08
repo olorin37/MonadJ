@@ -16,7 +16,7 @@ public abstract class Maybe<T> {
         return new Just<>(val);
     }
     public static <T> Maybe<T> nothing() {
-        return (Maybe<T>) new Nothing<>();
+        return new Nothing<>();
     }
 
     public abstract  <B> Maybe<B> bind(Function<T, Maybe<B>> f);
