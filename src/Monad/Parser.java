@@ -1,38 +1,39 @@
 package Monad;
 
 import Primitives.Pair;
-import java.util.LinkedList;
+import Monad.ListMonad;
 import java.util.function.Function;
 
 /**
  * Created by olorin on 18.06.14.
  */
 public class Parser<T> {
-    final Function<String, LinkedList<Pair<String, T>>> p;
+    final Function<String, ListMonad<Pair<String, T>>> p;
 
-    private Parser(Function<String, LinkedList<Pair<String, T>>> p) {
+    private Parser(Function<String, ListMonad<Pair<String, T>>> p) {
         this.p = p;
     }
     public static <T> Parser<T> unit(T val) {
-        return new Parser<T>((String s) -> { LinkedList<Pair<String, T>> l = new LinkedList<>();
+        return new Parser<T>((String s) -> { ListMonad<Pair<String, T>> l = new ListMonad<>();
                                              l.add(new Pair<>(s, val));
                                              return l;} );
     }
     public Parser<Character> item() {
          return new Parser<>((String s) -> {
-             LinkedList<Pair<String, Character>> l = new LinkedList<>();
+             ListMonad<Pair<String, Character>> l = new ListMonad<>();
              l.add(new Pair<>(s.substring(1), s.charAt(0)));
              return l; } );
     }
     public <U> Parser<U> bind(Function<T, Parser<U>> k) {
-        return null;
+        String x = "";
+        return (this.p(x)).bind((T a) -> new Parser<U>(y -> (k(a)).p(y)));
     }
 }
 
 
 abstract class Term<T> {
-
 }
+
 class Div<T> extends Term<T> {
     final Term<T> arg1;
     final Term<T> arg2;
