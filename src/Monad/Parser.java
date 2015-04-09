@@ -8,7 +8,7 @@ import java.util.function.Function;
  * Created by olorin on 18.06.14.
  */
 public class Parser<T> {
-    final Function<String, ListMonad<Pair<T, String>>> p;
+    private final Function<String, ListMonad<Pair<T, String>>> p;
     public ListMonad<Pair<T, String>> parse(String s) {
         return this.p.apply(s);
     }
@@ -28,7 +28,7 @@ public class Parser<T> {
              return l; } );
     }
     public <U> Parser<U> bind(Function<T, Parser<U>> k) {
-        return new Parser<U>( (String x) -> (this.p.apply(x)).bind((T a) -> (k.apply(a)).p.apply(y)));
+        return new Parser<U>( (String x) -> (this.p.apply(x)).bind((String y) -> (k.apply(a)).p.apply(y)));
     }
 }
 

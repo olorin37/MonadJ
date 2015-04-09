@@ -30,10 +30,10 @@ public class Main {
 
         System.out.println("Parsowany łańcuch: \"" + inp_str + "\"");
 
-        Pair<String, Character> res1 = (Parser.item()).parse(inp_str);
+        ListMonad<Pair<Character, String>> res1 = (Parser.item()).parse(inp_str);
         System.out.println("parse item we. : " + res1);
 
-        Pair<Integer, String> res2 = (Parser.unit(6)).parse("Napis2");
+        ListMonad<Pair<Integer, String>> res2 = (Parser.unit(6)).parse("Napis2");
         System.out.println("parse (unit 6) \"Napis2\" ");
 
     }
