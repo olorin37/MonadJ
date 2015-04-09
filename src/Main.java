@@ -1,6 +1,9 @@
 import Monad.*;
 import Primitives.Pair;
 
+import java.lang.Character;
+import java.lang.String;
+import java.lang.System;
 import java.util.Optional;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -12,8 +15,27 @@ import java.util.function.Function;
 public class Main {
     public static void main(String[] args)
     {
-        testMyMonads();
-        testMonadLowInOptional();
+        testParser();
+        //testMyMonads();
+        //testMonadLowInOptional();
+    }
+
+    public static void testParser()
+    {
+        System.out.println("\n");
+        System.out.println("Test monady Parser");
+        System.out.println("\n");
+
+        String inp_str = "Napis...";
+
+        System.out.println("Parsowany łańcuch: \"" + inp_str + "\"");
+
+        Pair<String, Character> res1 = (Parser.item()).parse(inp_str);
+        System.out.println("parse item we. : " + res1);
+
+        Pair<Integer, String> res2 = (Parser.unit(6)).parse("Napis2");
+        System.out.println("parse (unit 6) \"Napis2\" ");
+
     }
 
     public static void testMyMonads()

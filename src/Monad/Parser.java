@@ -8,25 +8,27 @@ import java.util.function.Function;
  * Created by olorin on 18.06.14.
  */
 public class Parser<T> {
-    final Function<String, ListMonad<Pair<String, T>>> p;
+    final Function<String, ListMonad<Pair<T, String>>> p;
+    public ListMonad<Pair<T, String>> parse(String s) {
+        return this.p.apply(s);
+    }
 
-    private Parser(Function<String, ListMonad<Pair<String, T>>> p) {
+    private Parser(Function<String, ListMonad<Pair<T, String>>> p) {
         this.p = p;
     }
     public static <T> Parser<T> unit(T val) {
-        return new Parser<T>((String s) -> { ListMonad<Pair<String, T>> l = new ListMonad<>();
-                                             l.add(new Pair<>(s, val));
+        return new Parser<T>((String s) -> { ListMonad<Pair<T, String>> l = new ListMonad<>();
+                                             l.add(new Pair<>(val, s));
                                              return l;} );
     }
-    public Parser<Character> item() {
+    public static Parser<Character> item() {
          return new Parser<>((String s) -> {
-             ListMonad<Pair<String, Character>> l = new ListMonad<>();
-             l.add(new Pair<>(s.substring(1), s.charAt(0)));
+             ListMonad<Pair<Character, String>> l = new ListMonad<>();
+             l.add(new Pair<>(s.charAt(0), s.substring(1)));
              return l; } );
     }
     public <U> Parser<U> bind(Function<T, Parser<U>> k) {
-        String x = "";
-        return (this.p(x)).bind((T a) -> new Parser<U>(y -> (k(a)).p(y)));
+        return new Parser<U>( (String x) -> (this.p.apply(x)).bind((T a) -> (k.apply(a)).p.apply(y)));
     }
 }
 
