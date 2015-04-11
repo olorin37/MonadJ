@@ -36,6 +36,11 @@ public class Main {
         ListMonad<Pair<Integer, String>> res2 = (Parser.unit(6)).parse("Napis2");
         System.out.println("parse (unit 6) \"Napis2\" ");
 
+        ListMonad<Pair<String,String>> res3 = (Parser.item().bind( x ->
+                                               Parser.item().bind( y ->
+                                               Parser.unit("["+x+", "+y+"]")))).parse(inp_str);
+        System.out.println("parse spec " + res3);
+
     }
 
     public static void testMyMonads()
