@@ -21,20 +21,26 @@ public class Parser<T> {
                                              l.add(new Pair<>(val, s));
                                              return l;} );
     }
-    public static Parser<Character> item() {
-         return new Parser<>((String s) -> {
-             ListMonad<Pair<Character, String>> l = new ListMonad<>();
-             l.add(new Pair<>(s.charAt(0), s.substring(1)));
-             return l; } );
-    }
     public <U> Parser<U> bind(Function<T, Parser<U>> k) {
         return new Parser<U>( (String x) -> (this.p.apply(x)).bind((Pair<T, String> pay) -> {
             T a = pay.s;
             String y = pay.v;
             return (k.apply(a)).p.apply(y); } ));
     }
-}
 
+    public static <T> Parser<T> zero() {
+        return new Parser<T>((String s) -> { ListMonad<Pair<T, String>> l = new ListMonad<>();
+                                             return l;})
+    }
+    //public <U> Parser<U> plus(Parser<T>)
+
+    public static Parser<Character> item() {
+         return new Parser<>((String s) -> {
+             ListMonad<Pair<Character, String>> l = new ListMonad<>();
+             l.add(new Pair<>(s.charAt(0), s.substring(1)));
+             return l; } );
+    }
+}
 
 abstract class Term<T> {
 }
