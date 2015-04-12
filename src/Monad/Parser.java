@@ -2,6 +2,9 @@ package Monad;
 
 import Primitives.Pair;
 import Monad.ListMonad;
+
+import java.lang.String;
+import java.util.ArrayList;
 import java.util.function.Function;
 
 /**
@@ -30,9 +33,11 @@ public class Parser<T> {
 
     public static <T> Parser<T> zero() {
         return new Parser<T>((String s) -> { ListMonad<Pair<T, String>> l = new ListMonad<>();
-                                             return l;})
+                                             return l;});
     }
-    //public <U> Parser<U> plus(Parser<T>)
+    public Parser<T> plus(Parser<T> m) {
+        return new Parser<T>((String s) ->((this.parse(s)).concatWith(m.parse(s))) );
+    }
 
     public static Parser<Character> item() {
          return new Parser<>((String s) -> {

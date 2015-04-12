@@ -55,7 +55,14 @@ public class ListMonad<A> extends LinkedList<A> implements List<A> {
     }
     public static <T> ListMonad<T> concat(ListMonad<ListMonad<T>> tlistlist) {
         ListMonad<T> res = new ListMonad<T>();
-        tlistlist.forEach( tlist -> res.addAll(tlist) );
+        tlistlist.forEach(tlist -> res.addAll(tlist));
+        return res;
+    }
+
+    public ListMonad<A> concatWith(ListMonad<A> snd) {
+        ListMonad<A> res = new ListMonad<A>();
+        res.addAll(this);
+        res.addAll(snd);
         return res;
     }
     
