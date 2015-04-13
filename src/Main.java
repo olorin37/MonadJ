@@ -53,6 +53,22 @@ public class Main {
         System.out.println("parse oneOrTwoItems \"s\" == " + oneOrTwoItems.parse("s").toString());
         System.out.println("parse oneOrTwoItems \"slowo\" == " + oneOrTwoItems.parse("slowo").toString());
 
+
+        System.out.println("Parser filtr");
+        Parser<Character> letter = (Parser.item()).filter((Character c) -> (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
+        Parser<Integer> digit = (Parser.item()).filter((Character c) -> (c >= '0' && c <= '9'))
+                                               .bind((Character c) -> Parser.unit(Integer.parseInt(c.toString())));
+
+        System.out.println("parse letter \"Napis\" " + letter.parse("Napis"));
+        System.out.println("parse letter \"1234\" " + letter.parse("1234"));
+        System.out.println("parse digit \"Napis\" " + digit.parse("Napis"));
+        System.out.println("parse digit \"1234\" " + digit.parse("1234"));
+
+        System.out.println("parse lit 'N' \"Napis\" " + lit('N').parse("Napis"));
+    }
+
+    public static Parser<Character> lit(Character l) {
+        return Parser.item().filter((Character c) -> l.equals(c));
     }
 
     public static void testMyMonads()
