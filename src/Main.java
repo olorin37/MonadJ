@@ -37,9 +37,21 @@ public class Main {
         System.out.println("parse (unit 6) \"Napis2\" ");
 
         ListMonad<Pair<String,String>> res3 = (Parser.item().bind( x ->
-                                               Parser.item().bind( y ->
-                                               Parser.unit("["+x+", "+y+"]")))).parse(inp_str);
+                                               Parser.item().bind(y ->
+                                                       Parser.unit("[" + x + ", " + y + "]")))).parse(inp_str);
         System.out.println("parse spec " + res3);
+
+        System.out.println("Parser oneOrTwoItems");
+        Parser<String> oneOrTwoItems = (Parser.item().bind( x ->
+                                        Parser.unit(x.toString()))
+                                       )
+                                  .plus(Parser.item().bind( x ->
+                                        Parser.item().bind( y ->
+                                        Parser.unit(x + "" + y)))
+                                       );
+        System.out.println("parse oneOrTwoItems \"\" == " + oneOrTwoItems.parse("").toString());
+        System.out.println("parse oneOrTwoItems \"s\" == " + oneOrTwoItems.parse("s").toString());
+        System.out.println("parse oneOrTwoItems \"slowo\" == " + oneOrTwoItems.parse("slowo").toString());
 
     }
 

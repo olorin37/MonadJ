@@ -42,7 +42,9 @@ public class Parser<T> {
     public static Parser<Character> item() {
          return new Parser<>((String s) -> {
              ListMonad<Pair<Character, String>> l = new ListMonad<>();
-             l.add(new Pair<>(s.charAt(0), s.substring(1)));
+             if (s.length() != 0) {
+                 l.add(new Pair<>(s.charAt(0), s.substring(1)));
+             }
              return l; } );
     }
 }

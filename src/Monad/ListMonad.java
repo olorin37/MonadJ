@@ -70,6 +70,6 @@ public class ListMonad<A> extends LinkedList<A> implements List<A> {
         StringBuilder sb = new StringBuilder();
         sb.append("Monadic[");
         this.forEach(v -> sb.append(v + ", "));
-        return sb.substring(0, sb.length()-2) + "]";
+        return sb.substring(0, (this.size() > 0) ? sb.length()-2 : sb.length()) + "]";
     }
 }
