@@ -3,6 +3,7 @@ package Monad;
 import Primitives.Pair;
 import Monad.ListMonad;
 
+import java.lang.Boolean;
 import java.lang.String;
 import java.util.ArrayList;
 import java.util.function.Function;
@@ -46,6 +47,19 @@ public class Parser<T> {
                  l.add(new Pair<>(s.charAt(0), s.substring(1)));
              }
              return l; } );
+    }
+
+    public Parser<T> filter(Function<T, Boolean> predicate) {
+        return this.bind((T a) -> (predicate.apply(a)) ? Parser.unit(a) : Parser.zero());
+    }
+
+    public Parser<T> ifNot(Parser<T> m) {
+        return new Parser<T>( (String s) -> this.parse(s).isEmpty() ? this.parse(s) : m.parse(s) );
+    }
+
+    public static Parser<ListMonad<T>> iterate(Parser<T> m) {
+        return m.bind( (T a) ->
+               iterate())
     }
 }
 
