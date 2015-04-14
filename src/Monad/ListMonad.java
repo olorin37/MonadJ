@@ -26,6 +26,9 @@ public class ListMonad<A> extends LinkedList<A> implements List<A> {
     public ListMonad(Collection<A> c) {
         super(c);
     }
+    public ListMonad(A head, ListMonad<A> tail) {
+        
+    }
 
     public static <T> ListMonad<T> unit(T val) {
         return new ListMonad<T>(val);
@@ -65,7 +68,7 @@ public class ListMonad<A> extends LinkedList<A> implements List<A> {
         res.addAll(snd);
         return res;
     }
-    
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Monadic[");
