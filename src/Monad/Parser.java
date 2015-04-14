@@ -57,10 +57,9 @@ public class Parser<T> {
         return new Parser<T>( (String s) -> this.parse(s).isEmpty() ? this.parse(s) : m.parse(s) );
     }
 
-    public static Parser<ListMonad<T>> iterate(Parser<T> m) {
-        return m.bind( (T a) ->
-               iterate())
-    }
+    //public static Parser<ListMonad<T>> iterate(Parser<T> m) {
+        //return m.bind( (T a) ->  iterate());
+    //}
 }
 
 abstract class Term<T> {
