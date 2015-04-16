@@ -15,8 +15,10 @@ import java.util.function.Function;
 public class Main {
     public static void main(String[] args)
     {
+
+
         testParser();
-        //testMyMonads();
+        testMyMonads();
         //testMonadLowInOptional();
     }
 
@@ -37,7 +39,7 @@ public class Main {
         System.out.println("parse (unit 6) \"Napis2\" ");
 
         ListMonad<Pair<String,String>> res3 = (Parser.item().bind( x ->
-                                               Parser.item().bind(y ->
+                                               Parser.item().bind( y ->
                                                        Parser.unit("[" + x + ", " + y + "]")))).parse(inp_str);
         System.out.println("parse spec " + res3);
 
@@ -65,6 +67,14 @@ public class Main {
         System.out.println("parse digit \"1234\" " + digit.parse("1234"));
 
         System.out.println("parse lit 'N' \"Napis\" " + lit('N').parse("Napis"));
+
+        Parser<Integer> number =
+                (digit           .bind( a ->
+                 digit.iterate() .bind( x ->
+                 Parser.unit(ListMonad.cons(a, x).foldl((n,k) -> 10*k+n, 0))
+                 )));
+
+        System.out.println("parse number '3708zxc' " + number.parse("3708zxc"));
     }
 
     public static Parser<Character> lit(Character l) {
@@ -113,11 +123,16 @@ public class Main {
         System.out.println("\nTest Monady listowej");
         ListMonad<Integer> vs = ListMonad.of(70,80);
         ListMonad<Integer> us = ListMonad.of(1,2,3,4,5);
+        ListMonad<Integer> lm = ListMonad.<Integer>of(1, 2, 3);
+        System.out.println("Liczba z " + lm +": " + lm.foldl((k, n) -> 10*k + n, 0) );
         System.out.println("Definiujemy dwie wartości monadyczne : " + vs + " oraz " + us );
+        System.out.println("Tytaj dodatkowo foldl, suma pierwszej " + vs.foldl((a, b) -> a + b, 0) + " suma drugiej: " +
+                            us.foldl((a,b) -> a + b, 0));
         System.out.println("Wyniki obliczeń:");
         System.out.println( vs.bind( x ->
                             us.bind( y ->
                             ListMonad.unit(x + y) )));
+
 
         BiFunction<Integer, Integer, Integer> inc = (a, b) -> a+1;
 
