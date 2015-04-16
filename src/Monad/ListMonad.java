@@ -6,10 +6,13 @@
  */
 package Monad;
 
+import java.util.*;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -27,9 +30,14 @@ public class ListMonad<A> extends LinkedList<A> implements List<A> {
         super(c);
     }
     public ListMonad(A head, ListMonad<A> tail) {
-        
+        super(tail);
+        this.addFirst(head);
     }
 
+
+    public static <T> ListMonad<T> empty() {
+        return new ListMonad<T>();
+    }
     public static <T> ListMonad<T> unit(T val) {
         return new ListMonad<T>(val);
     }
@@ -39,6 +47,9 @@ public class ListMonad<A> extends LinkedList<A> implements List<A> {
             res.add(val);
         }
         return res;
+    }
+    public static <T> ListMonad<T> cons(T head, ListMonad<T> tail) {
+        return new ListMonad<T>(head, tail);
     }
     public <B> ListMonad<B> bind(Function<A, ListMonad<B>> k) {
         return ListMonad.concat(this.map(k));
@@ -53,7 +64,7 @@ public class ListMonad<A> extends LinkedList<A> implements List<A> {
 
     public <B> ListMonad<B> map(Function<A, B> f) {
         ListMonad<B> res = new ListMonad<B>();
-        this.forEach(x -> res.add( f.apply(x) ));
+        this.forEach(x -> res.add(f.apply(x)));
         return res;
     }
     public static <T> ListMonad<T> concat(ListMonad<ListMonad<T>> tlistlist) {
@@ -66,6 +77,21 @@ public class ListMonad<A> extends LinkedList<A> implements List<A> {
         ListMonad<A> res = new ListMonad<A>();
         res.addAll(this);
         res.addAll(snd);
+        return res;
+    }
+
+    public <B> B foldl(BiFunction<B, A, B> f, B fst) {
+        Iterator<A> it = this.iterator();
+        B res = null;
+        if (it.hasNext()) {
+            A head = it.next();
+            res = f.apply(fst, head);
+            while (it.hasNext()) {
+                res = f.apply(res, it.next());
+            }
+        } else {
+            res = fst;
+        }
         return res;
     }
 
