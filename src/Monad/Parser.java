@@ -2,14 +2,13 @@ package Monad;
 
 import Primitives.Pair;
 import Monad.ListMonad;
-
 import java.lang.Boolean;
 import java.lang.String;
-import java.util.ArrayList;
 import java.util.function.Function;
 
 /**
  * Created by olorin on 18.06.14.
+ *
  */
 public class Parser<T> {
     private final Function<String, ListMonad<Pair<T, String>>> p;
@@ -21,23 +20,22 @@ public class Parser<T> {
         this.p = p;
     }
     public static <T> Parser<T> unit(T val) {
-        return new Parser<T>((String s) -> { ListMonad<Pair<T, String>> l = new ListMonad<>();
+        return new Parser<>((String s) -> { ListMonad<Pair<T, String>> l = new ListMonad<>();
                                              l.add(new Pair<>(val, s));
                                              return l;} );
     }
     public <U> Parser<U> bind(Function<T, Parser<U>> k) {
-        return new Parser<U>( (String x) -> (this.p.apply(x)).bind((Pair<T, String> pay) -> {
+        return new Parser<>( (String x) -> (this.p.apply(x)).bind((Pair<T, String> pay) -> {
             T a = pay.s;
             String y = pay.v;
             return (k.apply(a)).p.apply(y); } ));
     }
 
     public static <T> Parser<T> zero() {
-        return new Parser<T>((String s) -> { ListMonad<Pair<T, String>> l = new ListMonad<>();
-                                             return l;});
+        return new Parser<>((String s) ->  new ListMonad<>() );
     }
     public Parser<T> plus(Parser<T> m) {
-        return new Parser<T>((String s) ->((this.parse(s)).concatWith(m.parse(s))) );
+        return new Parser<>((String s) ->((this.parse(s)).concatWith(m.parse(s))) );
     }
 
     public static Parser<Character> item() {
@@ -54,14 +52,15 @@ public class Parser<T> {
     }
 
     public Parser<T> ifNot(Parser<T> m) {
-        return new Parser<T>( (String s) -> this.parse(s).isEmpty() ? this.parse(s) : m.parse(s) );
+        return new Parser<>( (String s) -> { ListMonad<Pair<T, String>> ans = this.parse(s);
+                                              return !ans.isEmpty() ? ans : m.parse(s); } );
     }
 
-    public  Parser<ListMonad<T>> iterate() {
-        return this.bind( (T a) ->
-               this.iterate().bind( (ListMonad<T> x) ->
-               Parser.unit(ListMonad.<T>cons(a, x))) ).ifNot(
-                Parser.unit(ListMonad.<T>empty()));
+    public Parser<ListMonad<T>> iterate() {
+        return this                                   .bind( ( a) ->
+               this.iterate()                         .bind( ( x) ->
+               Parser.unit(ListMonad.cons(a, x))) )
+                .ifNot(Parser.unit(ListMonad.empty()));
     }
 }
 

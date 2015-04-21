@@ -15,10 +15,8 @@ import java.util.function.Function;
 public class Main {
     public static void main(String[] args)
     {
-
-
         testParser();
-        testMyMonads();
+        //testMyMonads();
         //testMonadLowInOptional();
     }
 
@@ -68,13 +66,13 @@ public class Main {
 
         System.out.println("parse lit 'N' \"Napis\" " + lit('N').parse("Napis"));
 
-        Parser<Integer> number =
-                (digit           .bind( a ->
+        Parser<Integer> number = (
+                 digit           .bind( a ->
                  digit.iterate() .bind( x ->
-                 Parser.unit(ListMonad.cons(a, x).foldl((n,k) -> 10*k+n, 0))
+                 Parser.unit(ListMonad.cons(a, x).foldl((n,k) -> 10*n+k, 0))
                  )));
 
-        System.out.println("parse number '3708zxc' " + number.parse("3708zxc"));
+        System.out.println("parse number '3700' " + number.parse("3700"));
     }
 
     public static Parser<Character> lit(Character l) {
@@ -104,7 +102,7 @@ public class Main {
         System.out.println("Definiujemy dwie wartości monadyczne : " + liczba2 + " oraz " + blad );
         System.out.println("Wyniki obliczeń:");
         System.out.println( liczba2.bind(n ->
-                Validation.<Integer>unit(n+1).bind(k ->
+                Validation.unit(n+1).bind(k ->
                         Validation.unit(k*3)
                 )
         ) );
