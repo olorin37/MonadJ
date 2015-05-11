@@ -1,13 +1,11 @@
 import Monad.*;
-import Primitives.Pair;
+import Primitives.*;
 
 import java.lang.Character;
 import java.lang.String;
 import java.lang.System;
 import java.util.Optional;
-import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
  * Created by olorin on 12.04.14.
@@ -73,6 +71,21 @@ public class Main {
                  )));
 
         System.out.println("parse number '3700' " + number.parse("3700"));
+
+        Parser<Term<Integer>> term = (
+                                              number   .bind( a ->
+                                              Parser.unit(new Con<Integer>(a)))
+                                      .plus(
+                                              lit('(') .bind( omit1 ->
+                                              term     .bind( t  ->
+                                              lit('/') .bind( omit2 ->
+                                              term     .bind( u ->
+                                              lit(')') .bind( omit3 ->
+                                              Parser.unit(new Div<Integer>(t, u)))))))
+                                           )
+                                     );
+
+        System.out.println("parse term '(1/2)' " + term.parse("(1/2)"));
     }
 
     public static Parser<Character> lit(Character l) {
@@ -107,11 +120,11 @@ public class Main {
                 )
         ) );
         System.out.println( liczba2.<Integer>bind(i -> blad) );
-        System.out.println( liczba2.bind(n -> (blad).map(v -> v * 10 + 1)) );
+        System.out.println(liczba2.bind(n -> (blad).map(v -> v * 10 + 1)));
 
         System.out.println("\nTest Monady Identity");
-        Identity<Integer> v = Identity.unit(5);
-        Identity<Integer> u = Identity.unit(7);
+        Identity<Integer> v = Identity.<Integer>unit(5);
+        Identity<Integer> u = Identity.<Integer>unit(7);
         System.out.println("Definiujemy dwie wartości monadyczne : " + v + " oraz " + u );
         System.out.println("Wyniki obliczeń:");
         System.out.println( v.bind(x ->

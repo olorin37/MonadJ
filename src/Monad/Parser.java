@@ -7,7 +7,7 @@ import java.lang.String;
 import java.util.function.Function;
 
 /**
- * Created by olorin on 18.06.14.
+ * Created by Olórin on 18.06.14.
  *
  */
 public class Parser<T> {
@@ -61,23 +61,5 @@ public class Parser<T> {
                this.iterate()                         .bind( ( x) ->
                Parser.unit(ListMonad.cons(a, x))) )
                 .ifNot(Parser.unit(ListMonad.empty()));
-    }
-}
-
-abstract class Term<T> {
-}
-
-class Div<T> extends Term<T> {
-    final Term<T> arg1;
-    final Term<T> arg2;
-    Div(Term<T> arg1, Term<T> arg2) {
-        this.arg1 = arg1;
-        this.arg2 = arg2;
-    }
-}
-class Con<T> extends Term<T> {
-    final T val;
-    Con(T value) {
-        val = value;
     }
 }
