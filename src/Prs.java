@@ -29,15 +29,15 @@ public class Prs {
     public static Parser<Term<Integer>> term =
             (
                     number   .bind( a ->
-                            Parser.unit(new Con<Integer>(a)))
+                            Parser.<Term<Integer>>unit(new Con<Integer>(a)))
                             .plus(
-                                    lit('(') .bind( omit1 ->
-                                            term     .bind( t  ->
-                                                    lit('/') .bind( omit2 ->
-                                                            term     .bind( u ->
-                                                                    lit(')') .bind( omit3 ->
-                                                                            Parser.unit(new Div<Integer>(t, u)))))))
+                            lit('(') .bind( omit1 ->
+                            term     .bind( t  ->
+                            lit('/') .bind( omit2 ->
+                            term     .bind( u ->
+                            lit(')') .bind( omit3 ->
+                            Parser.<Term<Integer>>unit(new Div<Integer>(t, u)))))))
                             )
             );
-            */
+    */
 }
