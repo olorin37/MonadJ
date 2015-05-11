@@ -137,7 +137,7 @@ public class Main {
                 mcont2.<Integer>bind(z ->
                 Continuation.<Integer,String>unit(z + y))));
 
-        System.out.println("Wynik: " + p.evaluate(n -> n.toString()));
+        System.out.println("Wynik: " + p.evaluate(Integer::toString));
     }
 
     public static void testMonadLowInOptional()
