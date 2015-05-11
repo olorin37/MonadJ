@@ -17,8 +17,8 @@ public class Identity<T> {
         value = val;
     }
 
-    public static <T> Identity unit(T val) {
-        return new Identity<T>(val);
+    public static <T> Identity<T> unit(T val) {
+        return new Identity<>(val);
     }
 
     public <B> Identity<B> bind(Function<? super T, Identity<B>> f) {
@@ -26,7 +26,7 @@ public class Identity<T> {
     }
 
     public <B> Identity<B> map(Function<T, B> f) {
-        return new Identity<B>( f.apply(value) );
+        return new Identity<>( f.apply(value) );
     }
 
     public String toString() {

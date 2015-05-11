@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 
 /**
- * Created by olorin on 12.04.14.
+ * Created by Olórin on 12.04.14.
  */
 public class Main {
     public static void main(String[] args)
@@ -35,7 +35,7 @@ public class Main {
         System.out.println("parse (unit 6) \"Napis2\" ");
 
         ListMonad<Pair<String,String>> res3 = (Parser.item().bind( x ->
-                                               Parser.item().bind( y ->
+                                               Parser.item().bind(y ->
                                                        Parser.unit("[" + x + ", " + y + "]")))).parse(inp_str);
         System.out.println("parse spec " + res3);
 
@@ -51,45 +51,17 @@ public class Main {
         System.out.println("parse oneOrTwoItems \"s\" == " + oneOrTwoItems.parse("s").toString());
         System.out.println("parse oneOrTwoItems \"slowo\" == " + oneOrTwoItems.parse("slowo").toString());
 
+        System.out.println("parse letter \"Napis\" " + Prs.letter.parse("Napis"));
+        System.out.println("parse letter \"1234\" " + Prs.letter.parse("1234"));
 
-        System.out.println("Parser filtr");
-        Parser<Character> letter = (Parser.item()).filter((Character c) -> (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
-        Parser<Integer> digit = (Parser.item()).filter((Character c) -> (c >= '0' && c <= '9'))
-                                               .bind((Character c) -> Parser.unit(Integer.parseInt(c.toString())));
+        System.out.println("parse digit \"Napis\" " + Prs.digit.parse("Napis"));
+        System.out.println("parse digit \"1234\" " + Prs.digit.parse("1234"));
 
-        System.out.println("parse letter \"Napis\" " + letter.parse("Napis"));
-        System.out.println("parse letter \"1234\" " + letter.parse("1234"));
-        System.out.println("parse digit \"Napis\" " + digit.parse("Napis"));
-        System.out.println("parse digit \"1234\" " + digit.parse("1234"));
+        System.out.println("parse lit 'N' \"Napis\" " + Prs.lit('N').parse("Napis"));
 
-        System.out.println("parse lit 'N' \"Napis\" " + lit('N').parse("Napis"));
+        System.out.println("parse number '3700' " + Prs.number.parse("3700"));
 
-        Parser<Integer> number = (
-                 digit           .bind( a ->
-                 digit.iterate() .bind( x ->
-                 Parser.unit(ListMonad.cons(a, x).foldl((n,k) -> 10*n+k, 0))
-                 )));
-
-        System.out.println("parse number '3700' " + number.parse("3700"));
-
-        Parser<Term<Integer>> term = (
-                                              number   .bind( a ->
-                                              Parser.unit(new Con<Integer>(a)))
-                                      .plus(
-                                              lit('(') .bind( omit1 ->
-                                              term     .bind( t  ->
-                                              lit('/') .bind( omit2 ->
-                                              term     .bind( u ->
-                                              lit(')') .bind( omit3 ->
-                                              Parser.unit(new Div<Integer>(t, u)))))))
-                                           )
-                                     );
-
-        System.out.println("parse term '(1/2)' " + term.parse("(1/2)"));
-    }
-
-    public static Parser<Character> lit(Character l) {
-        return Parser.item().filter((Character c) -> l.equals(c));
+        //System.out.println("parse term '(1/2)' " + Prs.term.parse("(1/2)"));
     }
 
     public static void testMyMonads()
@@ -123,8 +95,8 @@ public class Main {
         System.out.println(liczba2.bind(n -> (blad).map(v -> v * 10 + 1)));
 
         System.out.println("\nTest Monady Identity");
-        Identity<Integer> v = Identity.<Integer>unit(5);
-        Identity<Integer> u = Identity.<Integer>unit(7);
+        Identity<Integer> v = Identity.unit(5);
+        Identity<Integer> u = Identity.unit(7);
         System.out.println("Definiujemy dwie wartości monadyczne : " + v + " oraz " + u );
         System.out.println("Wyniki obliczeń:");
         System.out.println( v.bind(x ->
