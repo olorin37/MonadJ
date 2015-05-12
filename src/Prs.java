@@ -25,19 +25,17 @@ public class Prs {
             digit.iterate().bind(x ->
             Parser.unit(ListMonad.cons(a, x).foldl((n, k) -> 10 * n + k, 0))
                     )));
-    /*
-    public static Parser<Term<Integer>> term =
-            (
-                    number   .bind( a ->
-                            Parser.<Term<Integer>>unit(new Con<Integer>(a)))
-                            .plus(
-                            lit('(') .bind( omit1 ->
-                            term     .bind( t  ->
-                            lit('/') .bind( omit2 ->
-                            term     .bind( u ->
-                            lit(')') .bind( omit3 ->
-                            Parser.<Term<Integer>>unit(new Div<Integer>(t, u)))))))
-                            )
-            );
-    */
+
+    public static Parser<Term<Integer>> term() {
+        return ( number   .bind(a ->
+                 Parser.<Term<Integer>>unit(new Con<Integer>(a)))
+                 .plus(
+                 lit('(') .bind(omit1 ->
+                 term()   .bind(t ->
+                 lit('/') .bind(omit2 ->
+                 term()   .bind(u ->
+                 lit(')') .bind(omit3 ->
+                 Parser.<Term<Integer>>unit(new Div<Integer>(t, u))))))))
+                );
+    }
 }

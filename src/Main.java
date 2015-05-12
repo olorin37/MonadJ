@@ -61,7 +61,9 @@ public class Main {
 
         System.out.println("parse number '3700' " + Prs.number.parse("3700"));
 
-        //System.out.println("parse term '(1/2)' " + Prs.term.parse("(1/2)"));
+        System.out.println("parse term '(1/2)' " + Prs.term().parse("(1/2)"));
+        System.out.println("parse term '(3/(6/2))' " + Prs.term().parse("(3/(6/2))"));
+        System.out.println("parse term '1774' " + Prs.term().parse("1774"));
     }
 
     public static void testMyMonads()
