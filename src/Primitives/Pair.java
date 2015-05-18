@@ -3,16 +3,16 @@ package Primitives;
 /**
  * Created by olorin on 09.06.14.
  */
-public class Pair<S, V> {
-    public S s;
-    public V v;
-    public Pair(S s, V v) {
-        this.s = s;
-        this.v = v;
+public class Pair<Fst, Snd> {
+    public Fst fst;
+    public Snd snd;
+    public Pair(Fst fst, Snd snd) {
+        this.fst = fst;
+        this.snd = snd;
     }
 
     @Override
     public String toString() {
-        return "("+s+", "+v+")";
+        return "("+fst+", "+snd+")";
     }
 }

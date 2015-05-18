@@ -10,6 +10,6 @@ public class ParsersTest {
     @Test
     public void testTermSimple() {
         assertEquals( new Div<>(new Con<>(1), new Con<>(2)),
-                      Prs.term().parse("(1/2)") );
+                      Prs.term().parse("(1/2)").get(0).fst );
     }
 }

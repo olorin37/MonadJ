@@ -25,8 +25,8 @@ public class State<S, V> {
         return (new State<S, W>( (S s0) ->
             {
                 Pair<S, V> p1 = this.st.apply(s0);
-                State<S, W> m = f.apply(p1.v);
-                Pair<S, W> p2 = m.st.apply(p1.s);
+                State<S, W> m = f.apply(p1.snd);
+                Pair<S, W> p2 = m.st.apply(p1.fst);
                 return (Pair<S, W>) p2;
             }
         ));
@@ -35,8 +35,8 @@ public class State<S, V> {
     public <W> State<S, W> map(Function<V, W> f) {
         return new State<S, W>( (S s0) -> {
             Pair<S, V> p1 = this.st.apply(s0);
-            W w = f.apply(p1.v);
-            return new Pair<>(p1.s, w);
+            W w = f.apply(p1.snd);
+            return new Pair<>(p1.fst, w);
         } );
     }
 
@@ -44,8 +44,8 @@ public class State<S, V> {
         return (new State<S, V>( (S s0) ->
         {
             Pair<S, V> p1 = this.st.apply(s0);
-            S s = stransform.apply(p1.s, p1.v);
-            return new Pair<S, V>(s, p1.v);
+            S s = stransform.apply(p1.fst, p1.snd);
+            return new Pair<S, V>(s, p1.snd);
         }
         ));
     }

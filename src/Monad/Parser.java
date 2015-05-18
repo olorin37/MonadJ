@@ -26,8 +26,8 @@ public class Parser<T> {
     }
     public <U> Parser<U> bind(Function<T, Parser<U>> k) {
         return new Parser<>( (String x) -> (this.p.apply(x)).bind((Pair<T, String> pay) -> {
-            T a = pay.s;
-            String y = pay.v;
+            T a = pay.fst;
+            String y = pay.snd;
             return (k.apply(a)).p.apply(y); } ));
     }
 
