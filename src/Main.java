@@ -13,9 +13,14 @@ import java.util.function.BiFunction;
 public class Main {
     public static void main(String[] args)
     {
+        testParserPerform();
+        /*
         testParser();
-        //testMyMonads();
-        //testMonadLowInOptional();
+        System.out.println(" -----------------------------------");
+        testMyMonads();
+        System.out.println(" -----------------------------------");
+        testMonadLowInOptional();
+        /**/
     }
 
     public static void testParser()
@@ -64,6 +69,19 @@ public class Main {
         System.out.println("parse term '(1/2)' " + Prs.term().parse("(1/2)"));
         System.out.println("parse term '(3/(6/2))' " + Prs.term().parse("(3/(6/2))"));
         System.out.println("parse term '1774' " + Prs.term().parse("1774"));
+
+    }
+
+    public static void testParserPerform() {
+        for (int i = 500; i < 2500; i+=10) {
+            int L =  i; //(int) Math.floor(Math.pow(10.0, i));
+            String str_ut = generateStr(L);
+            System.out.println(L + " parse term '" + str_ut + "' " + Prs.term().parse(str_ut));
+        } // 2370 nie daje rady
+    }
+
+    public static String generateStr(int n) {
+        return n<=1?""+n:("(" + generateStr(n-1) + "/" + n + ")");
     }
 
     public static void testMyMonads()
