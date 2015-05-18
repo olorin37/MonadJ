@@ -3,6 +3,7 @@ import Primitives.Pair;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import Primitives.Div;
 import Primitives.Con;
@@ -23,8 +24,7 @@ public class ParsersTest {
                 Prs.letter.parse("Napis").get(0).fst);
     }
     @Test
-    public void testPrsLetterNull() {
-        assertEquals(new ListMonad<Pair<Character,String>>(),
-                Prs.letter.parse("1234"));
+    public void testPrsLetterEmpty() {
+        assertTrue(Prs.letter.parse("1234").isEmpty());
     }
 }
