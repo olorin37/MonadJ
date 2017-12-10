@@ -62,7 +62,7 @@ class Just<T> extends Maybe<T> {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (this.getClass().equals(obj.getClass())) {
-            return this.value.equals( ((Just<T>)obj).value );
+            return this.value.equals(((Just<T>) obj).value);
         } else
             return false;
     }

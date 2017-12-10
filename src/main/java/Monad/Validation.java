@@ -12,7 +12,7 @@ public abstract class Validation<T> {
     protected Validation() {}
 
     public static <T> Validation<T> unit(T val) {
-        return new Success(val);
+        return new Success<T>(val);
     }
     public static <T> Validation<T> error(String errorMessage) {
         return new Error<T>(errorMessage);
